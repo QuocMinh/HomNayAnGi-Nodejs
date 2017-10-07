@@ -1,0 +1,65 @@
+extends layout
+
+block content
+	div.container.bg-color1
+		div.row
+			div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1.main-content.bg-color1
+				h2 Cập nhật thông tin cho món ăn
+				hr
+				if result !== undefined
+					div.alert.alert-dismissable.alert-info
+						a(data-dismiss="alert", aria-label="close").close &times;
+						strong= result
+				form(action='/foods/update', method='post',
+				enctype="multipart/form-data", ref='createFoodForm').form-horizontal
+					div.form-group
+						label(for='id').control-label.col-sm-4 Cập nhật _id cho món ăn:
+						div.col-sm-8
+							input(type='text', id='id', name='_id', required='required', value="#{food._id}").form-control
+					div.form-group
+						label(for='name').control-label.col-sm-4 Cập nhật tên cho món ăn:
+						div.col-sm-8
+							input(type='text', id='name', name='name', required='required', value="#{food.name}").form-control
+					div.form-group
+						label(for='type').control-label.col-sm-4 Loại:
+						div.col-sm-8
+							- var typeOpts = ['man', 'chay', 'both'];
+							- var typeOptsExpl = ['Món mặn', 'Món chay', 'Chay mặn đều dùng được'];
+							select(name='type', id='type').form-control
+								- for (var i=0;i<3;i++)
+									option(value=typeOpts[i], selected=food.type === typeOpts[i] ? true : false) #{typeOptsExpl[i]}
+					div.form-group
+						label.control-label.col-sm-4 Thành phần:
+						div.col-sm-8
+							label.checkbox-inline
+								input(type='checkbox', name='ingredient', value='thit')
+								span Thịt
+							label.checkbox-inline
+								input(type='checkbox', name='ingredient', value='ca')
+								span Cá
+							label.checkbox-inline
+								input(type='checkbox', name='ingredient', value='rau')
+								span Rau, củ
+					div.form-group
+						label(for='format').control-label.col-sm-4 Hình thù:
+						div.col-sm-8
+							- var formatOpts = ['canh', 'khong phai canh'];
+							- var formatOptsExpl = ['Canh', 'Không phải canh'];
+							select(name='format', id='format').form-control
+								- for (var i=0;i<2;i++)
+									option(value=formatOpts[i], selected=food.format === formatOpts[i] ? true : false) #{formatOptsExpl[i]}
+					div.form-group
+						label(for='picture').control-label.col-sm-4 Cập nhật hình ảnh cho món ăn:
+						div.col-sm-8
+							input(type="file", id='picture', name='pictureToUpload').form-control
+					div.form-group
+						label(for='guide').control-label.col-sm-4 Cập nhật file hướng dẫn:
+						div.col-sm-8
+							input(type="file", id='guide', name='guideToUpload').form-control
+					div.form-group
+						div.col-sm-8.col-sm-offset-4
+							div.btn-group
+								input(type='submit' value='Cập nhật').btn.btn-success
+								input(type='reset' value='Reset').btn.btn-warning
+		div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1
+			a(href="/") << Trở về trang chủ

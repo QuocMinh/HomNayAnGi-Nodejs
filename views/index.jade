@@ -1,0 +1,95 @@
+extends layout
+
+block content
+	div.container(align='center')
+		div.row
+			div.col-lg-8.col-lg-offset-2.col-md-8.col-md-offset-2.col-sm-10.col-sm-offset-1.bg-color2.main-content
+				h2 Chào bạn! Hôm nay bạn muốn ăn gì?
+				form(action='/foods/suggest', method='post')
+					div.row
+						div.col-lg-4.col-md-4
+							input(type='radio', name='type', value='man', id='monMan')
+							label.label-radio(for='monMan') Tôi muốn ăn mặn
+						div.col-lg-4.col-md-4
+							input(type='radio', name='type', value='chay', id='monChay', checked='checked')
+							label.label-radio(for='monChay') Tôi muốn ăn chay
+						div.col-lg-4.col-md-4
+							input(type='radio', name='type', value='both', id='monBoth')
+							label.label-radio(for='monBoth') Ăn gì cũng được
+					h3 Lọc cho tôi kết quả theo điều kiện bên dưới
+					div.more-content
+						div.row
+							div.col-lg-12.col-md-12
+								div.col-lg-6.col-md-6.col-sm-6
+									div.input-group
+										span.input-group-addon
+											input(type='checkbox', value='ca', name='ingredient')
+										label.form-control Nhất định phải có món Cá
+									div.input-group
+										span.input-group-addon
+											input(type='checkbox', value='thit', name='ingredient')
+										label.form-control Nhất định phải có món Thịt
+								div.col-lg-6.col-md-6.col-sm-6
+									div.input-group
+										span.input-group-addon
+											input(type='checkbox', value='rau', name='ingredient')
+										label.form-control Nhất định phải có Rau
+									div.input-group
+										span.input-group-addon
+											input(type='checkbox', value='canh', name='format')
+										label.form-control Nhất định phải có Canh
+						div.row.div-number
+							label(for='number') Nhập số lượng món cần gợi ý bên dưới
+							br
+							input(type='number', name='number', id='number', min=3, value=3)
+					div.row
+						input(type='submit', value='Gợi ý ngay', id='btnGoiY').btn.btn-default
+
+		div.row#result
+			if deleted !== undefined
+				div.alert.alert-success.alert-dismissable.col-sm-8.col-sm-offset-2(align='left')
+					a(data-dismiss="alert", aria-label="close").close &times;
+					strong Thành công!&#32;
+					span Đã xóa 1 Món ăn.
+			div.col-lg-12
+				if foods !== undefined
+					if numOfResult !== 0
+						div.alert.alert-success.alert-dismissable.col-sm-8.col-sm-offset-2(align='left')
+							a(data-dismiss="alert", aria-label="close").close &times;
+							strong= "Tìm thấy " + numOfResult + " kết quả gợi ý cho: "
+							ul
+								li Loại món:&#32;
+									b= type
+								li Nguyên liệu:&#32;
+									b= ingredient
+								li Hình thù:&#32;
+									b= format
+								li Số lượng gợi ý:&#32;
+									b= number
+						each food in foods
+							div(align='center').col-lg-4.col-md-6.col-sm-6.col-xs-6.food-content
+								div.food-content-inside
+									div.crop-img
+										img(src="../images/" + food.picture).img-food
+									p
+										b.font-md= food.name
+										br
+										div.btn-group
+											a(href="../pdf/" + food.guide, target="_blank").btn.btn-primary Xem cách nấu&#32;
+											a(href="/foods/update-food?_id=" + food._id).btn.btn-warning Chỉnh sửa
+											a(href="/foods/delete?_id=" + food._id).btn.btn-danger Xóa
+					else
+						div.alert.alert-danger.alert-dismissable.col-sm-8.col-sm-offset-2(align='left')
+							a(data-dismiss="alert", aria-label="close").close &times;
+							strong Không tìm thấy kết quả gợi ý cho:
+							ul
+								li Loại món:&#32;
+									b= type
+								li Các lựa chọn bổ sung:&#32;
+									b= ingredient
+								li Hình thù:&#32;
+									b= format
+								li Số lượng gợi ý:&#32;
+									b= number
+		div.row
+			a(href="/foods/new-food").btn-new Thêm món ăn mới
