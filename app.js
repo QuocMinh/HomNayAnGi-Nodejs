@@ -15,7 +15,8 @@ const fs            = require('fs');
 const fileUploader  = require('express-fileupload');
 
 // Connect mongodb
-mongoose.connect("mongodb://" + DB_URL, {useMongoClient: true});
+// mongoose.connect("mongodb://" + DB_URL, {useMongoClient: true});
+mongoose.connect(constant.mLAP_MONGO_URI, { useMongoClient: true });
 
 // Insert default data
 FoodController.addDefaultFood(function (err) {
